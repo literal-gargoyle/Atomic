@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Server Ping</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #ping-form label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    #ping-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #ping-form button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #response {
+      margin-top: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #response-text {
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Server Ping</h1>
+    <form id="ping-form">
+      <label for="url">Enter URL:</label>
+      <input type="text" id="url" name="url" required>
+      <button type="submit">Ping Server</button>
+    </form>
+    <div id="response">
+      <h2>Response Data</h2>
+      <pre id="response-text"></pre>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById('ping-form');
+    const responseText = document.getElementById('response-text');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const url = document.getElementById('url').value;
+
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(data => {
+          responseText.textContent = data;
+        })
+        .catch(error => {
+          responseText.textContent = `Error: ${error.message}`;
+        });
+    });
+  </script>
+</body>
+</html>
