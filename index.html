@@ -73,27 +73,26 @@
     </div>
   </div>
   <script>
+    const mcping = require('mcping-js'); 
     const form = document.getElementById('ping-form');
     const responseText = document.getElementById('response-text');
-
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-
       const url = document.getElementById('url').value;
-
-      fetch(url)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then(data => {
-          responseText.textContent = data;
-        })
-        .catch(error => {
-          responseText.textContent = `Error: ${error.message}`;
-        });
+      // Create a new MinecraftServer object
+      const server = new mcping.MinecraftServer(url); // default port is 25565
+      // Set a timeout (optional, but recommended)
+      const timeout = 5000; // 5 seconds
+      // Ping the server
+      server.ping(timeout, (err, res) => {
+        if (err) {
+          responseText.textContent = `Error: ${err.message}`;
+          return;
+        }
+        // Extract and format the information from the response
+        const responseMessage = `Server: ${res.hostname}\nStatus: ${res.online ? 'Online' : 'Offline'}\nPlayers: ${res.players.online}/${res.players.max}`;
+        responseText.textContent = responseMessage;
+      });
     });
   </script>
 </body>
